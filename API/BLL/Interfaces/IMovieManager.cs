@@ -6,10 +6,10 @@ namespace API.BLL.Interfaces
 {
     public interface IMovieManager
     {
-        public IEnumerable<MovieDTO> GetMovies();
-        public MovieDTO? GetMovie(int id);
-        public MovieDTO CreateMovie(MovieDTO movie);
-        public bool DeleteMovie(int id);
-        public MovieDTO? UpdateMovie(MovieDTO movie);
+        public Task<IEnumerable<MovieDTO>> GetMovies();
+        public Task<MovieDTO?> GetMovie(int id);
+        public Task<MovieDTO> CreateMovie(MovieDTO movie);
+        public Task<bool> DeleteMovie(int id);
+        public Task<MovieDTO?> UpdateMovie(MovieDTO movie);
     }
 }

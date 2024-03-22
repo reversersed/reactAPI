@@ -11,29 +11,29 @@ namespace API.DAL.DataAccess.Repositories
 
         private bool isExists(int id) => context.Movies.Any(i => i.Id == id);
 
-        public Movie CreateMovie(Movie movie)
+        public async Task<Movie> CreateMovie(Movie movie)
         {
             var genres = new List<Genre>();
-            movie.Genres.ToList().ForEach(i =>
+            movie.Genres.ToList().ForEach(async i =>
             {
-                genres.Add(context.Genres.Find(i.Id));
+                genres.Add(await context.Genres.FindAsync(i.Id));
             });
             movie.Genres = genres;
 
-            var entity = context.Movies.Add(movie);
+            var entity = await context.Movies.AddAsync(movie);
             context.SaveChanges();
             return entity.Entity;
         }
 
-        public bool DeleteMovie(int id)
+        public async Task<bool> DeleteMovie(int id)
         {
-            var movie = this.GetMovie(id);
+            var movie = await this.GetMovie(id);
             if(movie == null)
                 return false;
             try
             {
                 context.Remove(movie);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             catch
             {
@@ -42,21 +42,22 @@ namespace API.DAL.DataAccess.Repositories
             return true;
         }
 
-        public IEnumerable<Movie> GetMovie()
+        public async Task<IEnumerable<Movie>> GetMovie()
         {
-            return context.Movies
+            return await context.Movies
                 .Include(i => i.Genres)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Movie? GetMovie(int id)
+        public async Task<Movie?> GetMovie(int id)
         {
-            return context.Movies
+            return await context.Movies
                 .Include(i => i.Genres)
-                .Where(i => i.Id == id).FirstOrDefault();
+                .Where(i => i.Id == id)
+                .FirstOrDefaultAsync();
         }
 
-        public Movie? UpdateMovie(Movie movie)
+        public async Task<Movie?> UpdateMovie(Movie movie)
         {
             if(!isExists(movie.Id)) 
                 return null;
@@ -64,7 +65,7 @@ namespace API.DAL.DataAccess.Repositories
 
             try
             {
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             catch
             {

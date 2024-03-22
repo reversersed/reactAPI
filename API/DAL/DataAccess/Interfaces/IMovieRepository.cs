@@ -6,10 +6,10 @@ namespace API.DAL.DataAccess.Interfaces
 {
     public interface IMovieRepository
     {
-        public IEnumerable<Movie> GetMovie();
-        public Movie? GetMovie(int id);
-        public Movie CreateMovie(Movie movie);
-        public bool DeleteMovie(int id);
-        public Movie? UpdateMovie(Movie movie);
+        public Task<IEnumerable<Movie>> GetMovie();
+        public Task<Movie?> GetMovie(int id);
+        public Task<Movie> CreateMovie(Movie movie);
+        public Task<bool> DeleteMovie(int id);
+        public Task<Movie?> UpdateMovie(Movie movie);
     }
 }

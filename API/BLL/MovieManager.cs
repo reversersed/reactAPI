@@ -16,36 +16,36 @@ namespace API.BLL
             this.movieRepository = movieRepository;
             this.mapper = mapper;
         }
-        public MovieDTO CreateMovie(MovieDTO movie)
+        public async Task<MovieDTO> CreateMovie(MovieDTO movie)
         {
             var entity = mapper.Map<Movie>(movie);
-            var response = movieRepository.CreateMovie(entity);
+            var response = await movieRepository.CreateMovie(entity);
             return mapper.Map<MovieDTO>(response);
         }
 
-        public bool DeleteMovie(int id)
+        public async Task<bool> DeleteMovie(int id)
         {
-            return movieRepository.DeleteMovie(id);
+            return await movieRepository.DeleteMovie(id);
         }
 
-        public MovieDTO? GetMovie(int id)
+        public async Task<MovieDTO?> GetMovie(int id)
         {
-            var response = movieRepository.GetMovie(id);
+            var response = await movieRepository.GetMovie(id);
             if (response == null)
                 return null;
             return mapper.Map<MovieDTO>(response);
         }
 
-        public IEnumerable<MovieDTO> GetMovies()
+        public async Task<IEnumerable<MovieDTO>> GetMovies()
         {
-            var response = movieRepository.GetMovie();
+            var response = await movieRepository.GetMovie();
             return mapper.Map<IEnumerable<MovieDTO>>(response);
         }
 
-        public MovieDTO? UpdateMovie(MovieDTO movie)
+        public async Task<MovieDTO?> UpdateMovie(MovieDTO movie)
         {
             var entity = mapper.Map<Movie>(movie);
-            var response = movieRepository.UpdateMovie(entity);
+            var response = await movieRepository.UpdateMovie(entity);
             if (response == null)
                 return null;
             return mapper.Map<MovieDTO>(response);
