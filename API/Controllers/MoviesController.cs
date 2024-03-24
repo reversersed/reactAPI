@@ -55,7 +55,7 @@ namespace API.Controllers
         }
         // PUT: api/Movies/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, MovieDTO movie)
+        public async Task<ActionResult<MovieDTO?>> PutMovie(int id, MovieDTO movie)
         {
             if(id != movie.Id)
                 return BadRequest();
