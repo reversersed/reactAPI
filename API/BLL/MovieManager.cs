@@ -1,7 +1,7 @@
 ﻿using API.BLL.DTO;
 using API.BLL.Interfaces;
 using API.DAL.DataAccess.Interfaces;
-using API.DAL.Models;
+using API.DAL.Models.Data;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 

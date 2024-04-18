@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.DAL.Models
+namespace API.DAL.Models.Data
 {
     [Table("genres")]
     public class Genre

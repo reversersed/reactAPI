@@ -1,4 +1,5 @@
 ﻿using API.DAL.Models;
+using API.DAL.Models.Data;
 
 namespace API.DAL.DataAccess
 {

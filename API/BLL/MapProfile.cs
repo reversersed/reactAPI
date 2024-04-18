@@ -1,5 +1,5 @@
 ﻿using API.BLL.DTO;
-using API.DAL.Models;
+using API.DAL.Models.Data;
 using AutoMapper;
 
 namespace API.BLL

@@ -1,10 +1,7 @@
 ﻿using API.BLL.DTO;
 using API.BLL.Interfaces;
-using API.DAL.DataAccess;
-using API.DAL.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

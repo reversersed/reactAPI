@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using API.DAL.Models.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.DAL.Models;
 
-public partial class DataContext : DbContext
+public partial class DataContext : IdentityDbContext<User>
 {
     protected readonly IConfiguration configuration;
 

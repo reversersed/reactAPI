@@ -1,5 +1,6 @@
 ﻿using API.DAL.DataAccess.Interfaces;
 using API.DAL.Models;
+using API.DAL.Models.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.DAL.DataAccess.Repositories

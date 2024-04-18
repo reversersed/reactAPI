@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.DAL.Models;
+namespace API.DAL.Models.Data;
 
 [Table("movies")]
 public class Movie
