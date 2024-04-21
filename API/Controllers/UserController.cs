@@ -36,8 +36,9 @@ namespace API.Controllers
             {
                 return BadRequest(new { message = "Пользователя с такими данными не существует", error = ModelState.Values.SelectMany(e => e.Errors.Select(r => r.ErrorMessage)) });
             }
-
-            return Ok(new { message = "Пользователь авторизован", username = model.Username });
+            var user = await userManager.FindByNameAsync(model.Username);
+            var roles = await userManager.GetRolesAsync(user);
+            return Ok(new { message = "Пользователь авторизован", username = model.Username, userRole = roles.FirstOrDefault() });
         }
         [Route("register")]
         [HttpPost]
@@ -57,8 +58,9 @@ namespace API.Controllers
                 return BadRequest(new {message = "Во время регистрации произошла ошибка", error = ModelState.Values.SelectMany(e => e.Errors.Select(r => r.ErrorMessage)) });
             }
 
+            await userManager.AddToRoleAsync(user, "user");
             await signManager.SignInAsync(user, false);
-            return Ok(new { message = "Пользователь " + user.UserName + " зарегистрирован" });
+            return Ok(new { message = "Пользователь " + user.UserName + " зарегистрирован", userName = user.UserName, userRole = "user" });
         }
         [Route("logout")]
         [HttpPost]
@@ -82,7 +84,8 @@ namespace API.Controllers
             var user = await userManager.GetUserAsync(HttpContext.User);
             if (user == null)
                 return Unauthorized(new { message = "Гость" });
-            return Ok(new { message = "Вход выполнен", username = user.UserName });
+            var roles = await userManager.GetRolesAsync(user);
+            return Ok(new { message = "Вход выполнен", username = user.UserName, userRole = roles.FirstOrDefault() });
         }
     }
 }

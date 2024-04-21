@@ -1,5 +1,6 @@
 ﻿using API.BLL.DTO;
 using API.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,7 @@ namespace API.Controllers
         }
         //DELETE: api/Movies/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
             var response = await movieManager.DeleteMovie(id);
@@ -43,6 +45,7 @@ namespace API.Controllers
         }
         //POST: api/Movies
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<MovieDTO>> PublishMovie(MovieDTO movie)
         {
             if (!ModelState.IsValid)
@@ -52,6 +55,7 @@ namespace API.Controllers
         }
         // PUT: api/Movies/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<MovieDTO?>> PutMovie(int id, MovieDTO movie)
         {
             if(id != movie.Id)

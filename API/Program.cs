@@ -30,11 +30,35 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.ConfigureApplicationCookie(option =>
+{
+    option.Cookie.Name = "FilmFlow";
+    option.LoginPath = "/";
+    option.LogoutPath = "/";
+    option.AccessDeniedPath = "/";
+    option.Events.OnRedirectToLogin = ctx =>
+    {
+        ctx.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+    option.Events.OnRedirectToAccessDenied = ctx =>
+    {
+        ctx.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+});
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 3;
+    options.Lockout.AllowedForNewUsers = true;
+});
 var app = builder.Build();
 using(var scope =  app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     await DataContextSeed.SeedAsync(dataContext);
+    await IdentitySeed.GenerateUserRoles(scope.ServiceProvider);
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
