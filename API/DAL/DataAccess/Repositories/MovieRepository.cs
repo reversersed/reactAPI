@@ -81,6 +81,11 @@ namespace API.DAL.DataAccess.Repositories
             var response = await context.Reviews.AddAsync(review);
             await context.SaveChangesAsync();
 
+            var movie = await context.Movies.FindAsync(review.movie.Id);
+            movie.Rating = context.Reviews.Include(i => i.movie).Where(i => i.movie.Id == movie.Id).Average(x => x.Rating);
+            context.Movies.Update(movie);
+            await context.SaveChangesAsync();
+
             return response.Entity;
         }
     }
