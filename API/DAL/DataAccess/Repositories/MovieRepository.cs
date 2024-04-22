@@ -84,7 +84,7 @@ namespace API.DAL.DataAccess.Repositories
             await context.SaveChangesAsync();
 
             var movie = await context.Movies.FindAsync(review.movie.Id);
-            movie.Rating = context.Reviews.Include(i => i.movie).Where(i => i.movie.Id == movie.Id).Average(x => x.Rating);
+            movie.Rating = (float)Math.Round(context.Reviews.Include(i => i.movie).Where(i => i.movie.Id == movie.Id).Average(x => x.Rating), 1);
             context.Movies.Update(movie);
             await context.SaveChangesAsync();
 
