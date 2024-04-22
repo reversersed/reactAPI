@@ -47,6 +47,7 @@ namespace API.DAL.DataAccess.Repositories
             return await context.Movies
                 .Include(i => i.Genres)
                 .Include(i => i.Reviews)
+                    .ThenInclude(x => x.user)
                 .ToListAsync();
         }
 
@@ -55,6 +56,7 @@ namespace API.DAL.DataAccess.Repositories
             return await context.Movies
                 .Include(i => i.Genres)
                 .Include(i => i.Reviews)
+                    .ThenInclude(x => x.user)
                 .Where(i => i.Id == id)
                 .FirstOrDefaultAsync();
         }
