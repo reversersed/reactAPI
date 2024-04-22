@@ -12,7 +12,7 @@ namespace API.BLL
                 .ForMember(dst => dst.Genres, opt => opt.MapFrom(src => src.Genres))
                 .ForMember(dst => dst.Reviews, opt => opt.MapFrom(src => src.Reviews));
             CreateMap<Genre, GenreDTO>().ReverseMap();
-            CreateMap<Review, ReviewDTO>().ReverseMap();
+            CreateMap<Review, ReviewDTO>().ForMember(dst => dst.username, opt => opt.MapFrom(src => src.user.UserName));
             //CreateMap<MovieDTO, Movie>();
         }
     }
