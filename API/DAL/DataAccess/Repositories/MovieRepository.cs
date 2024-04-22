@@ -53,12 +53,16 @@ namespace API.DAL.DataAccess.Repositories
 
         public async Task<Movie?> GetMovie(int id)
         {
-            return await context.Movies
+            var movie = await context.Movies
                 .Include(i => i.Genres)
                 .Include(i => i.Reviews)
                     .ThenInclude(x => x.user)
                 .Where(i => i.Id == id)
                 .FirstOrDefaultAsync();
+            if(movie is not null)
+                movie.Reviews = movie.Reviews.OrderByDescending(i => i.Id).ToList();
+
+            return movie;
         }
 
         public async Task<Movie?> UpdateMovie(Movie movie)
