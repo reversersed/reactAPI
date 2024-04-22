@@ -50,5 +50,18 @@ namespace API.BLL
                 return null;
             return mapper.Map<MovieDTO>(response);
         }
+
+        public async Task<ReviewDTO> InsertReview(int movie, User user, ReviewDTO review)
+        {
+            var review_data = mapper.Map<Review>(review);
+            var movie_data = await movieRepository.GetMovie(movie);
+            if (movie_data is null)
+                throw new ArgumentNullException("empty movie");
+            review_data.movie = movie_data;
+            review_data.user = user;
+
+            var responsne = await movieRepository.InsertReview(review_data);
+            return mapper.Map<ReviewDTO>(responsne);
+        }
     }
 }

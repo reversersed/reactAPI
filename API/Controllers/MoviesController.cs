@@ -1,7 +1,9 @@
 ﻿using API.BLL.DTO;
 using API.BLL.Interfaces;
+using API.DAL.Models.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,9 +16,11 @@ namespace API.Controllers
     public class MoviesController : ControllerBase
     {
         private IMovieManager movieManager;
-        public MoviesController(IMovieManager movieManager)
+        private UserManager<User> userManager;
+        public MoviesController(IMovieManager movieManager, UserManager<User> userManager)
         {
             this.movieManager = movieManager;
+            this.userManager = userManager;
         }
         //GET: api/Movies
         [HttpGet]
@@ -64,6 +68,23 @@ namespace API.Controllers
             if (response == null)
                 return NotFound();
             return Ok(response);
+        }
+        [HttpPost, Route("{id}/review")]
+        [Authorize]
+        public async Task<IActionResult> InsertReview(int id, [FromBody] ReviewDTO review)
+        {
+            if(review is null)
+                return BadRequest(ModelState);
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            try
+            {
+                var response = await movieManager.InsertReview(id, user, review);
+                return Ok(response);
+            }
+            catch
+            {
+                return BadRequest(ModelState);
+            }
         }
     }
 }

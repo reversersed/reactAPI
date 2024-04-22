@@ -12,6 +12,7 @@ public partial class DataContext : IdentityDbContext<User>
 
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Genre> Genres { get; set; }
+    public DbSet<Review> Reviews { get; set; }
     #region Constructor
     public DataContext(IConfiguration configuration)
     {

@@ -25,5 +25,6 @@ namespace API.BLL.DTO
         public DateOnly? Premier { get; set; }
         public int? Age { get; set; }
         public ICollection<GenreDTO> Genres { get; set; } = new List<GenreDTO>();
+        public ICollection<ReviewDTO> Reviews { get; set; } = new List<ReviewDTO>();
     }
 }

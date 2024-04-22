@@ -49,4 +49,5 @@ public class Movie
     public int? Age { get; set; }
 
     public ICollection<Genre> Genres { get; set; } = new List<Genre>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }

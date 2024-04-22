@@ -42,11 +42,11 @@ namespace API.DAL.DataAccess.Repositories
             }
             return true;
         }
-
         public async Task<IEnumerable<Movie>> GetMovie()
         {
             return await context.Movies
                 .Include(i => i.Genres)
+                .Include(i => i.Reviews)
                 .ToListAsync();
         }
 
@@ -54,6 +54,7 @@ namespace API.DAL.DataAccess.Repositories
         {
             return await context.Movies
                 .Include(i => i.Genres)
+                .Include(i => i.Reviews)
                 .Where(i => i.Id == id)
                 .FirstOrDefaultAsync();
         }
@@ -73,6 +74,14 @@ namespace API.DAL.DataAccess.Repositories
                 throw;
             }
             return movie;
+        }
+
+        public async Task<Review> InsertReview(Review review)
+        {
+            var response = await context.Reviews.AddAsync(review);
+            await context.SaveChangesAsync();
+
+            return response.Entity;
         }
     }
 }

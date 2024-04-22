@@ -9,8 +9,10 @@ namespace API.BLL
         public MapProfile()
         {
             CreateMap<Movie, MovieDTO>().ReverseMap()
-                .ForMember(dst => dst.Genres, opt => opt.MapFrom(src => src.Genres));
+                .ForMember(dst => dst.Genres, opt => opt.MapFrom(src => src.Genres))
+                .ForMember(dst => dst.Reviews, opt => opt.MapFrom(src => src.Reviews));
             CreateMap<Genre, GenreDTO>().ReverseMap();
+            CreateMap<Review, ReviewDTO>().ReverseMap();
             //CreateMap<MovieDTO, Movie>();
         }
     }
