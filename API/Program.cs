@@ -57,8 +57,9 @@ var app = builder.Build();
 using(var scope =  app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-    await DataContextSeed.SeedAsync(dataContext);
+    dataContext.Database.EnsureCreated();
     await IdentitySeed.GenerateUserRoles(scope.ServiceProvider);
+    await DataContextSeed.SeedAsync(dataContext);
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

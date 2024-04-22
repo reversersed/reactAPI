@@ -6,7 +6,7 @@ namespace API.DAL.Models.Data
     {
         [Key]
         public int Id { get; set; }
-        public float Rating { get; set; }
+        public double Rating { get; set; }
         [Required]
         public Movie movie { get; set; }
         [Required]
