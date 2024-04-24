@@ -50,7 +50,10 @@ namespace API.BLL
                 return null;
             return mapper.Map<MovieDTO>(response);
         }
-
+        public async Task<IEnumerable<GenreDTO>> GetGenres()
+        {
+            return mapper.Map<IEnumerable<GenreDTO>>(await movieRepository.GetAllGenre());
+        }
         public async Task<ReviewDTO> InsertReview(int movie, User user, ReviewDTO review)
         {
             var review_data = mapper.Map<Review>(review);
@@ -62,6 +65,15 @@ namespace API.BLL
 
             var responsne = await movieRepository.InsertReview(review_data);
             return mapper.Map<ReviewDTO>(responsne);
+        }
+
+        public async Task<GenreDTO?> AddGenre(GenreDTO genre)
+        {
+            var genre_data = mapper.Map<Genre>(genre);
+            var response = await movieRepository.AddGenre(genre_data);
+            if (response is null)
+                return null;
+            return mapper.Map<GenreDTO>(response);
         }
     }
 }

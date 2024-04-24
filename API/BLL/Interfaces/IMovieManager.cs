@@ -13,5 +13,7 @@ namespace API.BLL.Interfaces
         public Task<bool> DeleteMovie(int id);
         public Task<MovieDTO?> UpdateMovie(MovieDTO movie);
         public Task<ReviewDTO> InsertReview(int movie, User user, ReviewDTO review);
+        public Task<IEnumerable<GenreDTO>> GetGenres();
+        public Task<GenreDTO?> AddGenre(GenreDTO genre);
     }
 }

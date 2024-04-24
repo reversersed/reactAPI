@@ -12,5 +12,7 @@ namespace API.DAL.DataAccess.Interfaces
         public Task<bool> DeleteMovie(int id);
         public Task<Movie?> UpdateMovie(Movie movie);
         public Task<Review> InsertReview(Review review);
+        public Task<IEnumerable<Genre>> GetAllGenre();
+        public Task<Genre?> AddGenre(Genre genre);
     }
 }

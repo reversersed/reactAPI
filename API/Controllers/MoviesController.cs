@@ -22,6 +22,22 @@ namespace API.Controllers
             this.movieManager = movieManager;
             this.userManager = userManager;
         }
+        [HttpGet, Route("genre")]
+        public async Task<ActionResult<IEnumerable<GenreDTO>>> GetGenres()
+        {
+            return Ok(await movieManager.GetGenres());
+        }
+        [HttpPost, Route("genre")]
+        public async Task<ActionResult<GenreDTO>> AddGenre([FromBody] string name)
+        {
+            if (name is null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var response = await movieManager.AddGenre(new GenreDTO { Name = name });
+            if (response is null)
+                return BadRequest(ModelState);
+            return Ok(response);
+        }
         //GET: api/Movies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieDTO>>> GetMovie()
@@ -33,7 +49,7 @@ namespace API.Controllers
         public async Task<ActionResult<MovieDTO>> GetMovie(int id)
         {
             var movie = await movieManager.GetMovie(id);
-            if(movie == null)
+            if (movie == null)
                 return NotFound();
             return movie;
         }
@@ -43,14 +59,14 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteMovie(int id)
         {
             var response = await movieManager.DeleteMovie(id);
-            if(!response)
+            if (!response)
                 return NotFound();
             return Ok();
         }
         //POST: api/Movies
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<MovieDTO>> PublishMovie(MovieDTO movie)
+        public async Task<ActionResult<MovieDTO>> PublishMovie([FromBody] MovieDTO movie)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

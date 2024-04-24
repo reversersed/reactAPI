@@ -15,9 +15,9 @@ namespace API.DAL.DataAccess.Repositories
         public async Task<Movie> CreateMovie(Movie movie)
         {
             var genres = new List<Genre>();
-            movie.Genres.ToList().ForEach(async i =>
+            movie.Genres.ToList().ForEach(i =>
             {
-                genres.Add(await context.Genres.FindAsync(i.Id));
+                genres.Add(context.Genres.Find(i.Id));
             });
             movie.Genres = genres;
 
@@ -93,6 +93,24 @@ namespace API.DAL.DataAccess.Repositories
             await context.SaveChangesAsync();
 
             return response.Entity;
+        }
+
+        public async Task<IEnumerable<Genre>> GetAllGenre()
+        {
+            return await context.Genres.ToListAsync();
+        }
+
+        public async Task<Genre?> AddGenre(Genre genre)
+        {
+            if (context.Genres.Where(i => i.Name.Equals(genre.Name)).Any())
+                return null;
+            var result = await context.Genres.AddAsync(genre);
+            if(result.State == EntityState.Added)
+            {
+                await context.SaveChangesAsync();
+                return result.Entity;
+            }
+            return null;
         }
     }
 }
