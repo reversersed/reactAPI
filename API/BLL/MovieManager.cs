@@ -75,5 +75,10 @@ namespace API.BLL
                 return null;
             return mapper.Map<GenreDTO>(response);
         }
+        public async Task<IEnumerable<MovieDTO>> GetByGenre(int genreid)
+        {
+            var response = await movieRepository.GetByGenre(genreid);
+            return mapper.Map<IEnumerable<MovieDTO>>(response);
+        }
     }
 }

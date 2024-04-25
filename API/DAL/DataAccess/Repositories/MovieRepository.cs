@@ -25,7 +25,10 @@ namespace API.DAL.DataAccess.Repositories
             context.SaveChanges();
             return entity.Entity;
         }
-
+        public async Task<IEnumerable<Movie>> GetByGenre(int genreid)
+        { 
+            return await context.Movies.Include(i => i.Genres).Where(i => i.Genres.Where(x => x.Id == genreid).Any()).ToListAsync();
+        }
         public async Task<bool> DeleteMovie(int id)
         {
             var movie = await this.GetMovie(id);

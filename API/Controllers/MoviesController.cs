@@ -73,6 +73,11 @@ namespace API.Controllers
             var response = await movieManager.CreateMovie(movie);
             return CreatedAtAction("GetMovie", new { id = response.Id }, response);
         }
+        [HttpGet, Route("bygenre/{id}")]
+        public async Task<ActionResult<IEnumerable<MovieDTO>>> GetByGenre(int id)
+        {
+            return Ok(await movieManager.GetByGenre(id));
+        }
         // PUT: api/Movies/5
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]

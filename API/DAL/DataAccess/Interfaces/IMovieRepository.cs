@@ -14,5 +14,6 @@ namespace API.DAL.DataAccess.Interfaces
         public Task<Review> InsertReview(Review review);
         public Task<IEnumerable<Genre>> GetAllGenre();
         public Task<Genre?> AddGenre(Genre genre);
+        public Task<IEnumerable<Movie>> GetByGenre(int genreid);
     }
 }
