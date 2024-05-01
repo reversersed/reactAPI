@@ -106,6 +106,31 @@ namespace API.Migrations
                     b.ToTable("movies");
                 });
 
+            modelBuilder.Entity("API.DAL.Models.Data.Replenishment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Replenishments");
+                });
+
             modelBuilder.Entity("API.DAL.Models.Data.Review", b =>
                 {
                     b.Property<int>("Id")
@@ -137,12 +162,47 @@ namespace API.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("API.DAL.Models.Data.Subscribtion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cost")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ExpirationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int[]>("Genres")
+                        .IsRequired()
+                        .HasColumnType("integer[]");
+
+                    b.Property<DateTime>("RegDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Subscribtions");
+                });
+
             modelBuilder.Entity("API.DAL.Models.Data.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Balance")
                         .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -348,6 +408,17 @@ namespace API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("API.DAL.Models.Data.Replenishment", b =>
+                {
+                    b.HasOne("API.DAL.Models.Data.User", "User")
+                        .WithMany("Replenishments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("API.DAL.Models.Data.Review", b =>
                 {
                     b.HasOne("API.DAL.Models.Data.Movie", "movie")
@@ -365,6 +436,17 @@ namespace API.Migrations
                     b.Navigation("movie");
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("API.DAL.Models.Data.Subscribtion", b =>
+                {
+                    b.HasOne("API.DAL.Models.Data.User", "User")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GenreMovie", b =>
@@ -440,7 +522,11 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.DAL.Models.Data.User", b =>
                 {
+                    b.Navigation("Replenishments");
+
                     b.Navigation("Reviews");
+
+                    b.Navigation("Subscriptions");
                 });
 #pragma warning restore 612, 618
         }

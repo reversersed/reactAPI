@@ -1,4 +1,5 @@
-﻿using API.DAL.Models.Data;
+﻿using API.BLL.Interfaces;
+using API.DAL.Models.Data;
 using API.DAL.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,11 +15,13 @@ namespace API.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signManager;
+        private readonly IAccountManager accountManager;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signManager)
+        public UserController(UserManager<User> userManager, SignInManager<User> signManager, IAccountManager accountManager)
         {
             this.signManager = signManager;
             this.userManager = userManager;
+            this.accountManager = accountManager;
         }
 
         [Route("login")]
@@ -86,6 +89,38 @@ namespace API.Controllers
                 return Unauthorized(new { message = "Гость" });
             var roles = await userManager.GetRolesAsync(user);
             return Ok(new { message = "Вход выполнен", username = user.UserName, userRole = roles.FirstOrDefault() });
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUser()
+        {
+            return Ok(await accountManager.GetUser(HttpContext.User.Identity.Name));
+        }
+        [HttpPost, Route("replenish")]
+        [Authorize]
+        public async Task<IActionResult> Pay([FromBody] int value)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+                return Unauthorized();
+            user.Balance += value;
+            await accountManager.CreateReplenishment(user, value);
+            await userManager.UpdateAsync(user);
+            return Ok();
+        }
+        [HttpPost, Route("subscribe")]
+        [Authorize]
+        public async Task<ActionResult<Subscribtion>> CreateSubscription([FromBody] string body)
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+                return Unauthorized();
+            int cost = Int32.Parse(body.Split("|")[0]);
+            List<int> genres = new();
+            body.Split("|")[1].Split(",").ToList().ForEach(i => genres.Add(Int32.Parse(i)));
+            user.Balance -= cost;
+            await userManager.UpdateAsync(user);
+            return Ok(await accountManager.CreateSubscription(user,cost,genres.ToArray()));
         }
     }
 }

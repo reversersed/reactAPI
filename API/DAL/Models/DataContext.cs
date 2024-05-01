@@ -13,6 +13,8 @@ public partial class DataContext : IdentityDbContext<User>
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<Replenishment> Replenishments { get; set; }
+    public DbSet<Subscribtion> Subscribtions { get; set; }
     #region Constructor
     public DataContext(IConfiguration configuration)
     {
@@ -30,6 +32,11 @@ public partial class DataContext : IdentityDbContext<User>
         {
             entity.HasMany(x => x.Genres)
                 .WithMany(x => x.Movies);
+        });
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasMany(x => x.Subscriptions).WithOne(i => i.User);
+            entity.HasMany(x => x.Replenishments).WithOne(i => i.User);
         });
         base.OnModelCreating(modelBuilder);
     }
