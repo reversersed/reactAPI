@@ -115,5 +115,16 @@ namespace API.DAL.DataAccess.Repositories
             }
             return null;
         }
+
+        public async Task<IEnumerable<Movie>> GetMovie(string? name, int[]? genre)
+        {
+            var response = await context.Movies
+                .Where(i => i.Name.Contains(name != null ? name : ""))
+                .Include(i => i.Genres)
+                .Include(i => i.Reviews)
+                    .ThenInclude(x => x.user)
+                .ToListAsync();
+            return response.Where(x => genre == null ? true : genre.All(g => x.Genres.Any(j => j.Id == g)));
+        }
     }
 }

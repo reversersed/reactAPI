@@ -2,6 +2,7 @@
 using API.DAL.Models.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Xml.Linq;
 
 namespace API.BLL.Interfaces
 {
@@ -16,5 +17,6 @@ namespace API.BLL.Interfaces
         public Task<IEnumerable<GenreDTO>> GetGenres();
         public Task<GenreDTO?> AddGenre(GenreDTO genre);
         public Task<IEnumerable<MovieDTO>> GetByGenre(int genreid);
+        public Task<IEnumerable<MovieDTO>> GetMoviesByFilter(string? name, int[]? genre);
     }
 }

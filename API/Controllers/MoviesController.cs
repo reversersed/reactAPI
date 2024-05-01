@@ -22,6 +22,14 @@ namespace API.Controllers
             this.movieManager = movieManager;
             this.userManager = userManager;
         }
+        [HttpGet, Route("filtered")]
+        public async Task<ActionResult<IEnumerable<MovieDTO>>> GetMovieFilter(string? name, string? genres)
+        {
+            List<int> genre = new();
+            genres?.Split(",").ToList().ForEach(i => genre.Add(Int32.Parse(i)));
+
+            return Ok(await movieManager.GetMoviesByFilter(name, genre.Count > 0 ? genre.ToArray() : null));
+        }
         [HttpGet, Route("genre")]
         public async Task<ActionResult<IEnumerable<GenreDTO>>> GetGenres()
         {

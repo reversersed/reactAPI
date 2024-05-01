@@ -7,6 +7,7 @@ namespace API.DAL.DataAccess.Interfaces
     public interface IMovieRepository
     {
         public Task<IEnumerable<Movie>> GetMovie();
+        public Task<IEnumerable<Movie>> GetMovie(string? name, int[]? genre);
         public Task<Movie?> GetMovie(int id);
         public Task<Movie> CreateMovie(Movie movie);
         public Task<bool> DeleteMovie(int id);
