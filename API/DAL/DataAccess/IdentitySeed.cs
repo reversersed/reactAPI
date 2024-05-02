@@ -20,17 +20,6 @@ namespace API.DAL.DataAccess
                 await rolesManager.CreateAsync(new IdentityRole("user"));
             }
 
-            string adminUsername = "admin";
-            string adminPassword = "Aa123456!";
-            if (await userManager.FindByNameAsync(adminUsername) == null)
-            {
-                User admin = new User { UserName = adminUsername };
-                IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(admin, "admin");
-                }
-            }
             string userName = "user";
             string userPassword = "Aa123456!";
             var usr = await userManager.FindByNameAsync(userName);
@@ -41,6 +30,17 @@ namespace API.DAL.DataAccess
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "user");
+                }
+            }
+            string adminUsername = "admin";
+            string adminPassword = "Aa123456!";
+            if (await userManager.FindByNameAsync(adminUsername) == null)
+            {
+                User admin = new User { UserName = adminUsername };
+                IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(admin, "admin");
                 }
             }
         }
