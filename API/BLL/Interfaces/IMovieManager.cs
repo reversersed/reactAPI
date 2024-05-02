@@ -18,5 +18,6 @@ namespace API.BLL.Interfaces
         public Task<GenreDTO?> AddGenre(GenreDTO genre);
         public Task<IEnumerable<MovieDTO>> GetByGenre(int genreid);
         public Task<IEnumerable<MovieDTO>> GetMoviesByFilter(string? name, int[]? genre);
+        public Task<float?> RemoveReview(int id);
     }
 }

@@ -86,5 +86,10 @@ namespace API.BLL
             var response = await movieRepository.GetMovie(name, genre);
             return mapper.Map<IEnumerable<MovieDTO>>(response);
         }
+
+        public async Task<float?> RemoveReview(int id)
+        {
+            return await movieRepository.DeleteReview(id);
+        }
     }
 }

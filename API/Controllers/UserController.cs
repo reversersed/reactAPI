@@ -50,15 +50,15 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { message = "Введены неверные данные", error = ModelState.Values.SelectMany(e => e.Errors.Select(r => r.ErrorMessage))});
+                return BadRequest(new { message = "Введены неверные данные", error = ModelState.Values.SelectMany(e => e.Errors.Select(r => r.ErrorMessage)) });
             }
             User user = new() { UserName = model.Username };
             var response = await userManager.CreateAsync(user, model.Password);
 
-            if(!response.Succeeded)
+            if (!response.Succeeded)
             {
                 response.Errors.ToList().ForEach(i => ModelState.AddModelError(string.Empty, i.Description));
-                return BadRequest(new {message = "Во время регистрации произошла ошибка", error = ModelState.Values.SelectMany(e => e.Errors.Select(r => r.ErrorMessage)) });
+                return BadRequest(new { message = "Во время регистрации произошла ошибка", error = ModelState.Values.SelectMany(e => e.Errors.Select(r => r.ErrorMessage)) });
             }
 
             await userManager.AddToRoleAsync(user, "user");
@@ -120,7 +120,14 @@ namespace API.Controllers
             body.Split("|")[1].Split(",").ToList().ForEach(i => genres.Add(Int32.Parse(i)));
             user.Balance -= cost;
             await userManager.UpdateAsync(user);
-            return Ok(await accountManager.CreateSubscription(user,cost,genres.ToArray()));
+            return Ok(await accountManager.CreateSubscription(user, cost, genres.ToArray()));
+        }
+        [HttpDelete("unsubscribe/{id}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveSubscription(int id)
+        {
+            await accountManager.RemoveSubscription(id, HttpContext.User.Identity.Name);
+            return NoContent();
         }
     }
 }

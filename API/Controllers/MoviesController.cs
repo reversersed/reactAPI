@@ -15,12 +15,14 @@ namespace API.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private IMovieManager movieManager;
-        private UserManager<User> userManager;
-        public MoviesController(IMovieManager movieManager, UserManager<User> userManager)
+        private readonly IMovieManager movieManager;
+        private readonly UserManager<User> userManager;
+        private readonly IAccountManager accountManager;
+        public MoviesController(IMovieManager movieManager, UserManager<User> userManager, IAccountManager accountManager)
         {
             this.movieManager = movieManager;
             this.userManager = userManager;
+            this.accountManager = accountManager;
         }
         [HttpGet, Route("filtered")]
         public async Task<ActionResult<IEnumerable<MovieDTO>>> GetMovieFilter(string? name, string? genres)
@@ -59,7 +61,7 @@ namespace API.Controllers
             var movie = await movieManager.GetMovie(id);
             if (movie == null)
                 return NotFound();
-            return movie;
+            return Ok(new{ movie= movie, subscribed= await accountManager.isSubscribed(movie, HttpContext.User.Identity.Name)});
         }
         //DELETE: api/Movies/5
         [HttpDelete("{id}")]
@@ -114,6 +116,12 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
+        }
+        [HttpDelete("review/{id}")]
+        [Authorize]
+        public async Task<ActionResult<float>> DeleteReview(int id)
+        {
+            return Ok(await movieManager.RemoveReview(id));
         }
     }
 }

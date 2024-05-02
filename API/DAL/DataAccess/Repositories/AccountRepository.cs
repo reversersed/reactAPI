@@ -27,5 +27,12 @@ namespace API.DAL.DataAccess.Repositories
         {
             return await context.Users.Where(x => x.UserName.Equals(username)).Include(x => x.Subscriptions.Where(i => i.ExpirationTime > DateTime.UtcNow)).SingleAsync();
         }
+        public async Task RemoveSubscription(int id, User user)
+        {
+            var sub = await context.Subscribtions.Where(i => i.Id == id).SingleAsync();
+            sub.ExpirationTime = DateTime.UtcNow;
+            context.Subscribtions.Update(sub);
+            await context.SaveChangesAsync();
+        }
     }
 }

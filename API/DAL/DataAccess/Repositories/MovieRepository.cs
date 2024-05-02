@@ -126,5 +126,20 @@ namespace API.DAL.DataAccess.Repositories
                 .ToListAsync();
             return response.Where(x => genre == null ? true : genre.All(g => x.Genres.Any(j => j.Id == g)));
         }
+
+        public async Task<float?> DeleteReview(int id)
+        {
+            var review = await context.Reviews.Include(i => i.movie).Where(i => i.Id == id).FirstOrDefaultAsync();
+            if (review == null)
+                return null;
+            context.Reviews.Remove(review);
+
+            var reviews = context.Reviews.Include(i => i.movie).Where(i => i.movie.Id == review.movie.Id && i.Id != review.Id);
+            var newRating = review.movie.Rating = (float)Math.Round(reviews.Any() ? reviews.Average(x => x.Rating) : 0, 1);
+
+            context.Movies.Update(review.movie);
+            await context.SaveChangesAsync();
+            return newRating;
+        }
     }
 }
