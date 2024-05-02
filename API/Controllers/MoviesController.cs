@@ -110,7 +110,8 @@ namespace API.Controllers
             try
             {
                 var response = await movieManager.InsertReview(id, user, review);
-                return Ok(response);
+                var movie = await movieManager.GetMovie(id);
+                return Ok(new {review = response, rating = movie.Rating});
             }
             catch
             {
